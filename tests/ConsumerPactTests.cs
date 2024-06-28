@@ -11,6 +11,7 @@ using System;
 using PactNet.Output.Xunit;
 using PactNet.Infrastructure.Outputters;
 using System.Threading.Tasks;
+using Provider.Models;
 
 namespace tests
 {
@@ -119,6 +120,34 @@ namespace tests
                 //Assert
                 var ex = await Assert.ThrowsAsync<HttpRequestException>(() => client.GetProduct(ctx.MockServerUri.AbsoluteUri, 10, null));
                 Assert.Equal("Response status code does not indicate success: 404 (Not Found).", ex.Message);
+            });
+        }
+
+        [Fact]
+        public async Task AddProduct_ReturnSuccess()
+        {
+            pact
+                .UponReceiving("a request to retrieve a product id that does not exist")
+                .WithRequest(HttpMethod.Post, "/Products")
+                .WillRespond()
+                .WithStatus(System.Net.HttpStatusCode.OK)
+                .WithHeader("Content-Type", "application/json; charset=utf-8");
+
+
+            //Act
+            await pact.VerifyAsync(async ctx =>
+            {
+                var client = new ProductClient();
+
+                //Assert
+                var data = await client.AddProducts(ctx.MockServerUri.AbsoluteUri, new Product()
+                {
+                    id = 1,
+                    name = "TestProduct",
+                    type = "TestType"
+                }, null);
+
+                Assert.NotNull(data);
             });
         }
     }
