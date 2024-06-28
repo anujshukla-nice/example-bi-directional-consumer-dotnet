@@ -122,11 +122,12 @@ namespace tests
                 Assert.Equal("Response status code does not indicate success: 404 (Not Found).", ex.Message);
             });
         }
+
         [Fact]
         public async Task AddProduct_ReturnSuccess()
         {
             pact
-                .UponReceiving("a request to retrieve a product id that does not exist")
+                .UponReceiving("a request to add a new product")
                 .WithRequest(HttpMethod.Post, "/Products")
                 .WillRespond()
                 .WithStatus(System.Net.HttpStatusCode.OK)
