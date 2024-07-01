@@ -132,12 +132,12 @@ namespace tests
                 .WillRespond()
                 .WithStatus(System.Net.HttpStatusCode.OK)
                 .WithHeader("Content-Type", "application/json; charset=utf-8")
-                .WithJsonBody(Match.MinType(new
+                .WithJsonBody(new
                 {
                     id = 1,
                     name = "TestProduct",
                     type = "TestType"
-                }, 1)); ;
+                });
 
 
             //Act
