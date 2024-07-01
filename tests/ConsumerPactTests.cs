@@ -131,7 +131,13 @@ namespace tests
                 .WithRequest(HttpMethod.Post, "/Products")
                 .WillRespond()
                 .WithStatus(System.Net.HttpStatusCode.OK)
-                .WithHeader("Content-Type", "application/json; charset=utf-8");
+                .WithHeader("Content-Type", "application/json; charset=utf-8")
+                .WithJsonBody(Match.MinType(new
+                {
+                    id = 1,
+                    name = "TestProduct",
+                    type = "TestType"
+                }, 1)); ;
 
 
             //Act
